@@ -1,5 +1,6 @@
-# Miner_Stat
-Estadistica del rendimiento en Mineria del Bitcoin
+# Miner Stat
+
+Es una serie de codigos, donde se concentra y se extrae informacion de Varias Apis para determinar ciertas inquetudes que con el tiempo estaremos analizando, Infiriendo a resultados empiricos.
 
 En Este repositorio estara todo el codigo para poder entender y manipular las relaciones que hay entre Variables de mineria en el ecocistema Blockchian
 
