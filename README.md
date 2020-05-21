@@ -10,8 +10,8 @@ Se desea saber si tenemos alguna correlacion entre variables, el cual usaremos d
 - Inferir si hay correlatividad entre el precio y el Halving y que Impacto este puede tener a futuro.
 
 
-**Preguntas**
--¿Mientras baje el HashRate hay mejores ganancias para aquellos que el costo de la luz es mas economico?
--¿Las pool existentes nos estan quitando un porcentaje de recompensa, del que merecemos?
--Basado en la recompensa con el Hashrate, Precio del Bitcoin y Pool donde mines, ¿que tiempo de vida les quedan a maquinas como: T9+ ~ S17?
+**Preguntas_**
+- ¿Mientras baje el HashRate hay mejores ganancias para aquellos que el costo de la luz es mas economico?
+- ¿Las pool existentes nos estan quitando un porcentaje de recompensa, del que merecemos?
+- Basado en la recompensa con el Hashrate, Precio del Bitcoin y Pool donde mines, ¿que tiempo de vida les quedan a maquinas como: T9+ ~ S17?
 
