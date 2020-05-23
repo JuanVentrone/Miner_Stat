@@ -1,6 +1,8 @@
 import urllib, json
 import requests
 import pandas as pd
+import os.path as path
+import math
 
 def pool_pie():
     # Español
@@ -32,10 +34,34 @@ def blockchain_stats():
     # English 
     # Info Blockchain Stats
 
-    url_pool= " https://api.blockchain.info/stats"
+    url_pool= "https://api.blockchain.info/stats"
     r = requests.get(url_pool)
     datos_varios=r.json()
     
     return datos_varios
 
+def block_scrapper_pages():
 
+    # Español
+    # Escrapea https://www.blockchain.com/btc/blocks Extae valores de cada Bloque
+
+    # Englisg
+    # Scrapper https://www.blockchain.com/btc/blocks Get Values from the each Block
+
+    stats=blockchain_stats()
+    n_range_block=stats.get("n_blocks_total")
+
+    url="https://www.blockchain.com/btc/blocks?page="
+
+    if path.exists("Blockchain_Tables/History_BLocks_info.csv"):
+        data_temp=pd.read_csv("Blockchain_Tables/History_BLocks_info.csv")
+        n_range_block=n_range_block-data_temp[0]["Height"]
+        n_range_block=0
+        if n_range_block==0:
+            print("Los datos estan actualizados al ultimo Bloque Minado ",stats.get("n_blocks_total") )
+            return None
+        
+    else:
+        None
+    n_pages=math.ceil(n_range_block/50)
+    
