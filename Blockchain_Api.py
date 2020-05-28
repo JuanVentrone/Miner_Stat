@@ -54,7 +54,12 @@ def block_scrapper_pages(n_pages,n_range_block):
     for i in range(n_pages):
         
         url_pages="https://www.blockchain.com/btc/blocks?page="+str(i+1)
-
+        if (i>n_pages/4):
+            print("25%")
+        if (i>n_pages/2):
+            print("50%")
+        if (i>(3*n_pages)/4):
+            print("75%")
         try:
             url_pages=requests.get(url_pages)
             if url_pages.status_code==200:
@@ -70,7 +75,7 @@ def block_scrapper_pages(n_pages,n_range_block):
 
                 block_links=[]
                 contador=0
-
+                
                 if n_range_block>50:
                     n_range_block-=50
                     c=50
