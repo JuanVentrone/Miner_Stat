@@ -3,7 +3,8 @@ import requests
 import pandas as pd
 import math
 from bs4 import BeautifulSoup
-import procces_table as pt
+from Python import procces_table as pt
+
 
 def pool_pie():
     # Español
@@ -166,8 +167,6 @@ def finding_blocks(n_range_block,links_blocks,links):
 
     return block_links
 
-# RECUERDA MODIFICAR EL DIR DEL PATH
-
 def scrapper_update():
     
     import os.path as path
@@ -183,13 +182,13 @@ def scrapper_update():
     stats=blockchain_stats()
     n_range_block=stats.get("n_blocks_total")
 
-    if path.exists("blockchain data/bc data/old data/data_crudo.csv"):
+    if path.exists("../blockchain data/bc data/old data/data_crudo.csv"):
 
-        data_old=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv",index_col=0)
+        data_old=pd.read_csv("../blockchain data/bc data/old data/data_crudo.csv",index_col=0)
         print("diferencias de bloques ",n_range_block, max(data_old["Height"]))
         n_range_block=n_range_block-max(data_old["Height"])
+        
         # Verificando si la Tabla esta Actualizada
-    
         # Checking if the Table is Updated
 
         if n_range_block==0:return print("Los datos estan actualizados al ultimo Bloque Minado ",n_range_block)
@@ -206,7 +205,7 @@ def scrapper_update():
             df_suma=table_save_update(df_new,data_old)
         
         from datetime import date
-        df_suma.to_csv("blockchain data/data_update"+str(date.today())+".csv")
+        df_suma.to_csv("../blockchain data/data_update"+str(date.today())+".csv")
 
 
 
@@ -249,11 +248,11 @@ def scrapper_partitions(page_init,n_times):
 
         df,dr= block_scrapper_pages(n_pages_1,n_range_block)
         df_new=last_scrpapping(df,dr,n_range_block)
-        df_new.to_csv("blockchain data/bc data/scrapper partition data/partition_data_"+str(page_init)+"_"+str(page_init+n_times)+".csv")
+        df_new.to_csv("../blockchain data/bc data/scrapper partition data/partition_data_"+str(page_init)+"_"+str(page_init+n_times)+".csv")
         
         s=input("¿Desea unir todas las los datos particionados? SI: Presione cualquier tecla")
         if s!="":
-            pt.uni_table("blockchain data/bc data/scrapper partition data")
+            pt.uni_table("../blockchain data/bc data/scrapper partition data")
             print("La data sea creado satisfactoriamente blockchain data/bc data/old data/data_crudo.csv")
             return
 
@@ -276,7 +275,7 @@ def last_scrpapping(df,dr,n_range_block):
         return df_new
 
 def scrapper_lost_block(direc):
-# Temporal
+
     # Español:
     # Scrappea los bloques que no fueron scrappeandos anteriormente, Los bloques y el rango de las paginas donde deben estar.
    
@@ -301,7 +300,7 @@ def scrapper_lost_block(direc):
         if "Height" in data_temp:
             df_new=table_save_update(data_temp,data)
         
-            df.to_csv("find_block"+str(n_range_block)+".csv")
+            df_new.to_csv("../blockchain data/bc data/lost range data/new data/find_block"+str(n_range_block)+".csv")
             print("Proceso Exitosamente Finalizado")
             
 
@@ -309,7 +308,6 @@ def scrapper_lost_block(direc):
                 
     
        
-        # CONTINUAMOS ordenar como vamos a guardar las tablas
             
 
 def graph_bar(g):
@@ -323,3 +321,7 @@ def graph_bar(g):
     return g
 
 # scrapper_lost_block("")
+
+# Codigo Creado por Juan Vicente Ventrone
+# github.com/JuanVentrone
+# Creating Code by Juan Vicente Venctrone

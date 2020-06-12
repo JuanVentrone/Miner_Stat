@@ -1,6 +1,10 @@
 import pandas as pd
+import numpy as np
 import math
-import Scrapper_Blockchain_Func as sf
+from Python import Scrapper_Blockchain_Func as sf
+
+
+
 
 
 def n_block():
@@ -43,7 +47,7 @@ def find_lost_block():
 
     df=process(block_f)
     df_error_pages=pd.DataFrame(df)
-    df_error_pages.to_csv("blockchain data/bc data/rang_lost_blocks.csv")
+    df_error_pages.to_csv("../blockchain data/bc data/rang_lost_blocks.csv")
     
     # si deseas activar un escrappeo inmediato
 
@@ -69,7 +73,7 @@ def uni_table(direc):
     return data
         
 def read_data():
-    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv") 
+    data=pd.read_csv("../blockchain data/bc data/old data/data_crudo.csv") 
     data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
     return data
 
@@ -82,10 +86,10 @@ def concat_partition_data():
     # Then concattenate with the main data
 
     data_old=read_data()
-    data_new=uni_table("blockchain data/bc data/scrapper partition data")
+    data_new=uni_table("../blockchain data/bc data/scrapper partition data")
     data_new=data_old.append(data_new)
     data_new.drop_duplicates("Height", keep='last')
-    data_new.to_csv("blockchain data/bc data/partition_data_crudo.csv")
+    data_new.to_csv("../blockchain data/bc data/partition_data_crudo.csv")
     print("Guardado en blockchain data/bc data/partition_data_crudo.csv")
 
 def concat_lost_block():
@@ -96,15 +100,15 @@ def concat_lost_block():
     # Concatenate all missing and scrapped data with the main data
 
     data_old=read_data()
-    data_new=uni_table("blockchain data/bc data/lost range data/new data/")
+    data_new=uni_table("../blockchain data/bc data/lost range data/new data/")
     data_new=data_old.append(data_new)
     data_new.drop_duplicates("Height", keep='last')
-    data_new.to_csv("blockchain data/bc data/data_crudo_check.csv")
+    data_new.to_csv("../blockchain data/bc data/data_crudo_check.csv")
     print("Guardado en blockchain data/bc data/data_crudo_check.csv")
 
 def partition_lost_bock():
 
-    data=pd.read_csv("blockchain data/bc data/rang_lost_blocks.csv")
+    data=pd.read_csv("../blockchain data/bc data/rang_lost_blocks.csv")
     x=int(len(data)/12)
 
     lista=[]
@@ -113,4 +117,12 @@ def partition_lost_bock():
 
     for i in lista:
         data_temp=data[i[0]:i[1]]
-        data_temp.to_csv("blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
+        data_temp.to_csv("../blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
+
+
+
+
+
+# Codigo Creado por Juan Vicente Ventrone
+# github.com/JuanVentrone
+# Creating Code by Juan Vicente Venctrone

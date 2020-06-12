@@ -16,3 +16,9 @@ Se desea saber si tenemos alguna correlacion entre variables, el cual usaremos d
 - ¿Las pool existentes nos estan quitando un porcentaje de recompensa, del que merecemos?
 - Basado en la recompensa con el Hashrate, Precio del Bitcoin y Pool donde mines, ¿que tiempo de vida les quedan a maquinas como: T9+ ~ S17?
 
+
+
+
+Codigo Creado por Juan Vicente Ventrone
+github.com/JuanVentrone
+Creating Code by Juan Vicente Venctrone

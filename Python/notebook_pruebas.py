@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 import math
-import Scrapper_Blockchain_Func as sbf
-import procces_table as pt
+from Python import Scrapper_Blockchain_Func as sbf
+from Python import procces_table as pt
+
+
 
 data=pd.read_csv("Blockchain_Tables/rang_paginas_erradas.csv")
 data
