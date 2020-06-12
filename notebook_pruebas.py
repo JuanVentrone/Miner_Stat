@@ -1,132 +1,77 @@
-import urllib, json
-import requests
 import pandas as pd
-import os.path as path
-import math
-from bs4 import BeautifulSoup
-
-
-
-
-
-url_pages="https://www.blockchain.com/btc/blocks?page="+str(1)
-
-        # try:
-url_pages=requests.get(url_pages)
-if url_pages.status_code==200:
-    print("dentro de la condicion 200")
-                    # Scrapping the mean Page --- Escrapeo la pagina principal
-
-    sopa=BeautifulSoup(url_pages.text, "html5lib")
-    links=sopa.find_all("a",attrs={"class":"sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 kVizQZ"})
-    links_blocks=[link.get("href") for link in links]
-                    
-                    
-                    # Scrapping each block-page --- Escrapeo cada pagina del bloque
-
-    block_links=[]
-    n_bloques_scrapper=[]
-    contador=0
-    if n_range_block>50:
-        n_range_block-=50
-        c=50
-    else:
-        c=n_range_block
-
-    c=int(len(links_blocks)/3)
-    for a in range(c):
-        block_links.append("https://www.blockchain.com"+links_blocks[contador])
-        n_bloques_scrapper.append(links[contador].get_text())
-        contador+=3          
-
-n_bloques_scrapper
-
-import Blockchain_Api as ba
-
-stats=ba.blockchain_stats()
-
-stats.get('n_blocks_total')
-
-n_block_last_update=631600
-n_range_block= stats.get("n_blocks_total")-n_block_last_update
-n_pages=math.ceil(n_range_block/50)
-n_pages
-
-if 50<n_range_block:
-    n_range_block-=50
-else:
-    None
 import numpy as np
-import random as rd
-data_ejemplo=[]
-data={}
-def prueba():
-    data["primero"]=rd.random()
-    data["segundo"]=rd.random()
-    return data
-for i in range(4):
-    data_ejemplo.append(prueba())
-data_ejemplo
+import math
+import Scrapper_Blockchain_Func as sbf
+import procces_table as pt
 
-# df=pd.DataFrame(data_temp)
-# df.to_csv("Blockchain_Tables/History_BLocks_info.csv")
+data=pd.read_csv("Blockchain_Tables/rang_paginas_erradas.csv")
+data
+sbf.scrapper_lost_block()
+pt.init_lost_block()
+0 in df.columns
+data.shape
 
-df["Height"]=pd.to_numeric(df["Height"])
-df.drop(df[df["Height"]<=max(data_old["Height"])].index, inplace=False)
-
-# def update_block_scrapper():
-#     df=pd.DataFrame(block_scrapper_pages())
-#     df.to_csv("Blockchain_Tables/History_BLocks_info.csv")
-df=block_scrapper_pages()
-
-df.to_csv("tabla_provicional.csv")
-df_prueba=df.copy()
-# stats=blockchain_stats()
-# n_range_block=stats.get("n_blocks_total")
-# n_pages=3
-# for i in range(n_pages):
-#     print(i+1)
-df_prueba["Height"]=pd.to_numeric(df_prueba["Height"])
-df_prueba.drop(df_prueba[df_prueba["Height"]<=max(data_old["Height"])].index, inplace=False)
-min(df_prueba["Height"])
-
-a=9
-a-=4
-for i in range(1):
-    print(i+1)
+len(data)/15
+data.iloc[[5, 3], data.columns.get_indexer()]
+data
+171/12
+lista=[]
 
 
-stats=blockchain_stats()
-stats.get("n_blocks_total")
-datos=pd.read_csv("tabla_provicional.csv",index_col=0)
-datos.drop(datos.columns[datos.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-datos
-datos.shape
-datos_prueba=pd.read_csv("tabla_provicional_prueba.csv")
-datos_prueba.shape
-datos=datos.drop(["Unnamed: 0","Unnamed: 0.1","Unnamed: 0.1.1","Unnamed: 0.1.1.1","Unnamed: 0.1.1.1.1"],axis=1)
-max(datos_prueba["Height"])
-datos.to_csv("tabla_provicional.csv")
-datos.head()
 
-datos_prueba.shape
-datos_prueba["Height"]=pd.to_numeric(datos_prueba["Height"])
-datos_prueba=datos_prueba.drop(datos_prueba.iloc[["Height"]<631710].index)
-data=data[data["sha"]=="256"]
-datos_prueba.head()
-max(datos_prueba["Height"])
+lista=[]
+for i in range(15):
+    lista.append([i*15,i*15+15])
 
-datos_prueba.to_csv("tabla_provicional_prueba.csv")
-datos_prueba=pd.read_csv("tabla_provicional_prueba.csv",index_col=0)
+lista[0]
+
+for i in lista:
+    data_temp=data[i[0]:i[1]]
+    data_temp.to_csv("blockchain data/bc data/lost range data_"+str(i[0])+"_"+str(i[1])+".csv")
+data=pd.read_csv("new_table.csv")
+data.shape
+
+if "Height" in data:
+    print("esa si era una perra")
+
+pt.find_lost_block()
+
+pt.partition_lost_bock()
 
 
-datos_prueba.head()
+data=pd.read_csv("blockchain data/bc data/lost range data/lost_blocks0_14.csv")
+data.shape
+len(data)
+c=0
+for i in range(len(data)):
+            
+    n_pages_1= range(data["Ini Page"][i],data["Final Page"][i])
+    n_range_block= range(data["I block"][i],data["F block"][i]+1)
+    for i in n_pages_1:
+        print("pagina :",i,"bloques:",n_range_block)
+        c+=1
+print(c)
 
 
-datos_1= datos_prueba.loc[datos_prueba["Height"]>631710]
-datos_2=datos_prueba.loc[datos_prueba["Height"]<631660]
-datos_1.to_csv("tabla_provicional_prueba.csv")
-df_suma=pd.concat([datos_1,datos_2])
-datos_prueba.drop(datos_prueba.columns[datos_prueba.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-datos_1.shape
-datos_2.shape
+lista=[]
+for i in range(x):
+    lista.append([i*x,i*x+x])
+lista
+
+len(data)/12
+
+sbf.scrapper_lost_block("blockchain data/bc data/lost range data/lost_blocks0_14.csv")
+
+
+data_re=pd.read_csv("blockchain data/data_update2020-06-10.csv")
+data_re
+
+import numpy as np
+
+x = np.array([[3,6],[5,7]])
+y = x.transpose()
+a = np.array([1,2])
+b = np.array([3,4,5])
+print(a+b)
+x = 20
+not np.any([x%i == 0 for i in range(2, x)])
