@@ -19,6 +19,6 @@ Se desea saber si tenemos alguna correlacion entre variables, el cual usaremos d
 
 
 
-Codigo Creado por Juan Vicente Ventrone
+Codigo Creado por *Juan Vicente Ventrone*
 github.com/JuanVentrone
-Creating Code by Juan Vicente Venctrone
+Creating Code by *Juan Vicente Venctrone*
