@@ -71,14 +71,14 @@ def block_scrapper_pages(n_pages_1,n_range_block):
         try:
             url_pages=requests.get(url_pages)
             if url_pages.status_code==200:
-                print("entro a la URL")
+                print("BLoques buscados: ",n_range_block)
                 # Scrapping the mean Page --- Escrapeo la pagina principal
 
                 sopa=BeautifulSoup(url_pages.text, "html5lib")
                                                        
                 links=sopa.find_all("a",attrs={"class":"sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 boNhIO"})
                 links_blocks=[link.get("href") for link in links]
-                print(len(links))
+                
                 
            
 
@@ -200,7 +200,7 @@ def scrapper_update():
         # Scrapper Innit
 
         df,dr= block_scrapper_pages(n_pages,n_range_block)
-        if dr==[]:table_save_update(df,data_old)
+        if dr==[]:df_suma=table_save_update(df,data_old)
         else:
             df_new=last_scrpapping(df,dr,n_range_block)
             df_suma=table_save_update(df_new,data_old)

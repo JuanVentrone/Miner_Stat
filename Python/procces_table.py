@@ -6,7 +6,6 @@ from Python import Scrapper_Blockchain_Func as sf
 
 
 
-
 def n_block():
     stats=sf.blockchain_stats()
     return stats.get("n_blocks_total")
@@ -14,11 +13,14 @@ def n_block():
 def rango_b(a,b,i,block_f,lista_height):
 
     while a==lista_height[i]:
-        if a==b:return print("Hemos Finalizado")
+        if a==b:return print("Finalizo la Busqueda de Bloques no escrapeados")
         a+=1
         i+=1
     block_f.append([a,lista_height[i]])
-    return rango_b(lista_height[i],b,i,block_f,lista_height)
+
+    a=lista_height[i]
+    print(a)
+    return rango_b(a,b,i,block_f,lista_height)
 
 
 def process(block_f):
@@ -27,8 +29,8 @@ def process(block_f):
     total=n_block()
     for i in block_f:
         
-        a=math.ceil((total-i[0])/50+2)
-        b=math.ceil((total-i[1])/50-1)
+        a=math.ceil(((total-i[0])/50)+2)
+        b=math.ceil(((total-i[1])/50)-1)
         page_url_list.append({"Ini Page":b,"Final Page":a,"I block":i[0],"F block":i[1]})
 
     return page_url_list
@@ -41,7 +43,6 @@ def find_lost_block():
     a=min(lista_height)
     b=max(lista_height)
     block_f=[]
-    c=0
     i=0 
     rango_b(a,b,i,block_f,lista_height)
 
@@ -50,7 +51,6 @@ def find_lost_block():
     df_error_pages.to_csv("blockchain data/bc data/rang_lost_blocks.csv")
     
     # si deseas activar un escrappeo inmediato
-
     # r=str(input("El Proceso se realizo exitosamente!,¿Desea Scrappear los Bloques Faltantes,?,Presione cualquier tecla"))
     # if r!="":sf.scrapper_lost_block()
 
@@ -73,7 +73,10 @@ def uni_table(direc):
     return data
         
 def read_data():
-    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv") 
+    direc="blockchain data/bc data/old data/data_crudo_1.csv"
+    print(direc)
+    data=pd.read_csv(direc)
+
     data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
     return data
 
@@ -118,6 +121,17 @@ def partition_lost_bock():
     for i in lista:
         data_temp=data[i[0]:i[1]]
         data_temp.to_csv("blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
+
+def partition_data_crudo():
+
+    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
+    x=int(len(data)/2)
+    data_1=data[x:]
+    data_2=data[:x]
+    data_1.to_csv("blockchain data/bc data/old data/data_crudo_1.csv")
+    data_2.to_csv("blockchain data/bc data/old data/data_crudo_2.csv")
+
+
 
 
 

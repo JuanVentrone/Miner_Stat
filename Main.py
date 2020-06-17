@@ -4,3 +4,7 @@ import math
 from Python import Scrapper_Blockchain_Func as sf
 from Python import procces_table as pt
 
+
+sf.scrapper_update()
+
+pt.concat_lost_block()
