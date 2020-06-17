@@ -17,10 +17,7 @@ def rango_b(a,b,i,block_f,lista_height):
         a+=1
         i+=1
     block_f.append([a,lista_height[i]])
-
-    a=lista_height[i]
-    print(a)
-    return rango_b(a,b,i,block_f,lista_height)
+    return rango_b(lista_height[i],b,i,block_f,lista_height)
 
 
 def process(block_f):
@@ -73,10 +70,8 @@ def uni_table(direc):
     return data
         
 def read_data():
-    direc="blockchain data/bc data/old data/data_crudo_1.csv"
-    print(direc)
-    data=pd.read_csv(direc)
-
+    
+    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
     data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
     return data
 
@@ -121,16 +116,6 @@ def partition_lost_bock():
     for i in lista:
         data_temp=data[i[0]:i[1]]
         data_temp.to_csv("blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
-
-def partition_data_crudo():
-
-    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
-    x=int(len(data)/2)
-    data_1=data[x:]
-    data_2=data[:x]
-    data_1.to_csv("blockchain data/bc data/old data/data_crudo_1.csv")
-    data_2.to_csv("blockchain data/bc data/old data/data_crudo_2.csv")
-
 
 
 
