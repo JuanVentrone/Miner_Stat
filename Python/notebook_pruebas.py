@@ -77,3 +77,34 @@ b = np.array([3,4,5])
 print(a+b)
 x = 20
 not np.any([x%i == 0 for i in range(2, x)])
+
+matriz=np.array([[1,3,5],
+                [5,6,7],
+                [10,11,13]])
+vector=np.array([[1,2,4],[3,6,5]])
+vector.shape
+multiplicacion=matriz*vector
+multi_r=vector*matriz
+
+multi_r
+multiplicacion
+
+vector_2=np.array([[1,2,3],
+                    [2,3,3],
+                    [4,5,3]])
+vector_2.shape
+matriz*vector_2
+vector.dot(matriz)
+matriz.dot(vector)
+
+a= np.array([[1, 2, 3, 4]
+           ,[5, 6, 7, 8] 
+           ,[9,10, 11,12]])
+
+a=np.array([[1,2],[1,4],[3,4]])
+b=np.array([1,2])
+a.dot(b).shape
+b.shape
+matriz= np.array([[1 ,3], [5 ,6]])
+vector=np.array([[3],[3]])
+matriz+vector

@@ -61,23 +61,24 @@ def block_scrapper_pages(n_pages_1,n_range_block):
     for i in n_pages_1:
             
         if ((type(n_pages_1)==tuple)+(type(n_pages_1)==range)==1):
-            print("escrapeando pagina: ",i)
+            print("Escrapeando pagina: ",i)
             url_pages="https://www.blockchain.com/btc/blocks?page="+str(i)
         else:
             print("escrapeando pagina: ",i+1)
             url_pages="https://www.blockchain.com/btc/blocks?page="+str(i+1)
-        
+            
 
         try:
             url_pages=requests.get(url_pages)
             if url_pages.status_code==200:
-                
+                print("entro a la URL")
                 # Scrapping the mean Page --- Escrapeo la pagina principal
 
                 sopa=BeautifulSoup(url_pages.text, "html5lib")
-                links=sopa.find_all("a",attrs={"class":"sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 kVizQZ"})
+                                                       
+                links=sopa.find_all("a",attrs={"class":"sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 boNhIO"})
                 links_blocks=[link.get("href") for link in links]
-                
+                print(len(links))
                 
            
 
@@ -96,8 +97,8 @@ def block_scrapper_pages(n_pages_1,n_range_block):
                         lista_q=[]
                         datos_temporal={}
                         s=BeautifulSoup(pagina_url.text, "html5lib")
-                        p = s.find("div",attrs={'class':'sc-1s7qjmx-0 iLEnZs'})
-
+                        p = s.find("div",attrs={'class':'sc-2msc2s-0 glvncZ'})
+                    
                         h=p.find_all("span",attrs={'class':'sc-1ryi78w-0 gCzMgE sc-16b9dsl-1 kUAhZx sc-1n72lkw-0 lhmHll'})
                         q=p.find_all("span",attrs={'class':'sc-1ryi78w-0 gCzMgE sc-16b9dsl-1 kUAhZx u3ufsr-0 fGQJzg'})
                         
@@ -114,8 +115,8 @@ def block_scrapper_pages(n_pages_1,n_range_block):
                                     
                         for e in range(len(lista_q)):
                             datos_temporal[lista_h[e]]=lista_q[e]
-                                    
-                        miner_wallet_link=p.find("a",attrs={'class':'sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 kVizQZ'})
+                                                                
+                        miner_wallet_link=p.find("a",attrs={'class':'sc-1r996ns-0 gzrtQD sc-1tbyx6t-1 kXxRxe iklhnl-0 boNhIO'})
                         datos_temporal["Miner Name"]=miner_wallet_link.get_text()
                         datos_temporal["URL Miner"]=miner_wallet_link.get("href")
                         
@@ -182,9 +183,9 @@ def scrapper_update():
     stats=blockchain_stats()
     n_range_block=stats.get("n_blocks_total")
 
-    if path.exists("../blockchain data/bc data/old data/data_crudo.csv"):
+    if path.exists("blockchain data/bc data/old data/data_crudo.csv"):
 
-        data_old=pd.read_csv("../blockchain data/bc data/old data/data_crudo.csv",index_col=0)
+        data_old=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv",index_col=0)
         print("diferencias de bloques ",n_range_block, max(data_old["Height"]))
         n_range_block=n_range_block-max(data_old["Height"])
         
@@ -205,7 +206,7 @@ def scrapper_update():
             df_suma=table_save_update(df_new,data_old)
         
         from datetime import date
-        df_suma.to_csv("../blockchain data/data_update"+str(date.today())+".csv")
+        df_suma.to_csv("blockchain data/data_update"+str(date.today())+".csv")
 
 
 
@@ -248,11 +249,11 @@ def scrapper_partitions(page_init,n_times):
 
         df,dr= block_scrapper_pages(n_pages_1,n_range_block)
         df_new=last_scrpapping(df,dr,n_range_block)
-        df_new.to_csv("../blockchain data/bc data/scrapper partition data/partition_data_"+str(page_init)+"_"+str(page_init+n_times)+".csv")
+        df_new.to_csv("blockchain data/bc data/scrapper partition data/partition_data_"+str(page_init)+"_"+str(page_init+n_times)+".csv")
         
         s=input("¿Desea unir todas las los datos particionados? SI: Presione cualquier tecla")
         if s!="":
-            pt.uni_table("../blockchain data/bc data/scrapper partition data")
+            pt.uni_table("blockchain data/bc data/scrapper partition data")
             print("La data sea creado satisfactoriamente blockchain data/bc data/old data/data_crudo.csv")
             return
 
@@ -269,8 +270,9 @@ def last_scrpapping(df,dr,n_range_block):
         df_new=pd.DataFrame(df)
         df_2,dr_2= block_scrapper_pages(dr,n_range_block)
         if dr_2!=[]:print("Analizar que ocurre con las paginas:",dr_2)
-        df_new_2=pd.DataFrame(df_2)
-        df_new=df_new.append(df_new_2)
+        if df_2!=[None]:
+            df_new_2=pd.DataFrame(df_2)
+            df_new=df_new.append(df_new_2)
         # df_new.drop(df_new.columns[df_new.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
         return df_new
 
@@ -284,23 +286,25 @@ def scrapper_lost_block(direc):
 
         data=pd.read_csv(direc)
         data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-        data=data.apply(pd.to_numeric)
+        data=data.astype('int64')
         data_temp=pd.DataFrame()
         for i in range(len(data)):
             
             n_pages_1= range(data["Ini Page"][i],data["Final Page"][i])
             n_range_block= range(data["I block"][i],data["F block"][i]+1)
             df,dr= block_scrapper_pages(n_pages_1,n_range_block)
-            if dr!=[]:df_2=last_scrpapping(df,dr,n_range_block)
             
-            
-            if df!=[None]:data_temp=data_temp.append(df_2)
+            if df!=[None]: 
+                if dr!=[]:df=last_scrpapping(df,dr,n_range_block)
+                else:df=pd.DataFrame(df)
+                data_temp=data_temp.append(df)
             
         
         if "Height" in data_temp:
-            df_new=table_save_update(data_temp,data)
-        
-            df_new.to_csv("../blockchain data/bc data/lost range data/new data/find_block"+str(n_range_block)+".csv")
+            
+            data_temp= data_temp.drop_duplicates("Height", keep='last')
+            # data_temp.drop(data_temp.columns[data_temp.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+            data_temp.to_csv("blockchain data/bc data/lost range data/new data/find_block"+str(n_range_block)+".csv")
             print("Proceso Exitosamente Finalizado")
             
 
@@ -320,7 +324,6 @@ def graph_bar(g):
         g+=1
     return g
 
-# scrapper_lost_block("")
 
 # Codigo Creado por Juan Vicente Ventrone
 # github.com/JuanVentrone
