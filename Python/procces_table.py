@@ -35,14 +35,16 @@ def process(block_f):
 def find_lost_block():
     
     data=read_data()
+    data["Height"] = data["Height"].astype(int)
     lista_height=list(data["Height"])
     lista_height.sort()
     a=min(lista_height)
     b=max(lista_height)
+    print(a,b)
     block_f=[]
-    i=0 
+    i=0
     rango_b(a,b,i,block_f,lista_height)
-
+    if block_f==[]:return print("La data tiene todos los bloques",len(data),"-",max(data["Height"]))
     df=process(block_f)
     df_error_pages=pd.DataFrame(df)
     df_error_pages.to_csv("blockchain data/bc data/rang_lost_blocks.csv")
@@ -72,7 +74,8 @@ def uni_table(direc):
 def read_data():
     
     data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
-    data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
+    if 'Unnamed: 0' in data:
+        data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
     return data
 
 def concat_partition_data():
@@ -84,9 +87,10 @@ def concat_partition_data():
     # Then concattenate with the main data
 
     data_old=read_data()
-    data_new=uni_table("blockchain data/bc data/scrapper partition data")
+    data_new=uni_table("blockchain data/bc data/scrapper partition data/")
     data_new=data_old.append(data_new)
-    data_new.drop_duplicates("Height", keep='last')
+    data_new=data_new.sort_values(by=['Height'],ascending=False)
+    data_new=data_new.drop_duplicates("Height")
     data_new.to_csv("blockchain data/bc data/partition_data_crudo.csv")
     print("Guardado en blockchain data/bc data/partition_data_crudo.csv")
 
@@ -100,9 +104,10 @@ def concat_lost_block():
     data_old=read_data()
     data_new=uni_table("blockchain data/bc data/lost range data/new data/")
     data_new=data_old.append(data_new)
-    data_new.drop_duplicates("Height", keep='last')
-    data_new.to_csv("blockchain data/bc data/data_crudo_check.csv")
-    print("Guardado en blockchain data/bc data/data_crudo_check.csv")
+    data_new=data_new.sort_values(by=['Height'],ascending=False)
+    data_new=data_new.drop_duplicates("Height")
+    data_new.to_csv("blockchain data/bc data/old data/data_crudo.csv")
+    print("Guardado en blockchain data/bc data/old data/data_crudo.csv")
 
 def partition_lost_bock():
 
@@ -117,7 +122,11 @@ def partition_lost_bock():
         data_temp=data[i[0]:i[1]]
         data_temp.to_csv("blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
 
-
+def coy_file():
+    import shutil
+    from datetime import date
+    shutil.copyfile("blockchain data/bc data/old data/data_crudo.csv","blockchain data/bc data/data_update_"+str(date.today())+".csv")
+    print("Data Actualizada")
 
 
 # Codigo Creado por Juan Vicente Ventrone

@@ -185,15 +185,16 @@ def scrapper_update():
 
     if path.exists("blockchain data/bc data/old data/data_crudo.csv"):
 
-        data_old=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv",index_col=0)
+        data_old=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
+        data_old.to_csv("blockchain data/bc data/old data/old_data.csv")
         print("diferencias de bloques ",n_range_block, max(data_old["Height"]))
         n_range_block=n_range_block-max(data_old["Height"])
-        
+        print(n_range_block)
         # Verificando si la Tabla esta Actualizada
         # Checking if the Table is Updated
 
         if n_range_block==0:return print("Los datos estan actualizados al ultimo Bloque Minado ",n_range_block)
-
+        
         n_pages=math.ceil(n_range_block/50)
         
         # Iniciando el scrapper 
@@ -205,8 +206,9 @@ def scrapper_update():
             df_new=last_scrpapping(df,dr,n_range_block)
             df_suma=table_save_update(df_new,data_old)
         
-        from datetime import date
-        df_suma.to_csv("blockchain data/data_update"+str(date.today())+".csv")
+        df_suma.to_csv("blockchain data/bc data/old data/data_crudo.csv")
+
+
 
 
 
@@ -214,14 +216,16 @@ def scrapper_update():
         print("No se puede ejecutar todo el scrappeo, tomaria mucho tiempo puedes ejecutar la Func: scrapper_partitions ",
             " donde puedes particionar el scrapper")
 
-    return print("EL scrappeo se a efectuado exitosamente Primera Actualizacion")
+    return print("Funcion scrapper_update COmpleta")
 
 def table_save_update(df_new,data_old):
 
     df_suma=df_new.append(data_old)
-    df_suma= df_suma.drop_duplicates("Height", keep='last')
-    df_suma.drop(df_suma.columns[df_suma.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-
+    df_suma=df_suma.sort_values(by=['Height'],ascending=False)
+    df_suma=df_suma.drop_duplicates("Height")
+    if 'Unnamed: 0' in df_suma:
+        df_suma.drop(df_suma.columns[df_suma.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+    df_suma=df_suma.dropna()
     return df_suma
     
 
@@ -276,18 +280,19 @@ def last_scrpapping(df,dr,n_range_block):
         # df_new.drop(df_new.columns[df_new.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
         return df_new
 
-def scrapper_lost_block(direc):
+def scrapper_lost_block():
 
     # Español:
     # Scrappea los bloques que no fueron scrappeandos anteriormente, Los bloques y el rango de las paginas donde deben estar.
    
     # English
     # Scrap blocks that were not scrapped before, get rank list
-
-        data=pd.read_csv(direc)
+       
+        data=pd.read_csv("blockchain data/bc data/rang_lost_blocks.csv")
         data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
         data=data.astype('int64')
         data_temp=pd.DataFrame()
+
         for i in range(len(data)):
             
             n_pages_1= range(data["Ini Page"][i],data["Final Page"][i])
@@ -302,10 +307,14 @@ def scrapper_lost_block(direc):
         
         if "Height" in data_temp:
             
-            data_temp= data_temp.drop_duplicates("Height", keep='last')
-            # data_temp.drop(data_temp.columns[data_temp.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+            
+            data_temp=data_temp.sort_values(by=['Height'],ascending=False)
+            data_temp=data_temp.drop_duplicates("Height")
+            if 'Unnamed: 0' in data_temp:data_temp.drop(data_temp.columns[data_temp.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+            data_temp=data_temp.dropna
             data_temp.to_csv("blockchain data/bc data/lost range data/new data/find_block"+str(n_range_block)+".csv")
             print("Proceso Exitosamente Finalizado")
+            
             
 
         else:print("No se encontro ninguno de los bloques buscados")
