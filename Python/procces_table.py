@@ -54,26 +54,31 @@ def find_lost_block():
     # if r!="":sf.scrapper_lost_block()
 
 def uni_table(direc):
+    import os
     g=0
     data=pd.DataFrame()
-    import os
+    director=[]
     dir_tables=os.listdir(direc)
+    for dir in dir_tables:
+        if not dir.startswith('.'):
+          director.append(dir)
+    if director!=[]:
+      for i in director:
+          
+          try:
+              data_temp=pd.read_csv(direc+i)
+              data=data.append(data_temp)
+              g=sf.graph_bar(g)
+          except:
+              print("No se pudo concatenar:",direc+i)
+              pass
+      return director  
+    else:return []
+      
     
-    for i in dir_tables:
-        
-        try:
-            data_temp=pd.read_csv(direc+i)
-            data=data.append(data_temp)
-            g=sf.graph_bar(g)
-        except:
-            print("No se pudo concatenar:",direc+i)
-            pass
-    
-    return data
-        
 def read_data():
     
-    data=pd.read_csv("blockchain data/bc data/old data/data_crudo.csv")
+    data=pd.read_csv("/blockchain data/bc data/old data/data_crudo.csv")
     if 'Unnamed: 0' in data:
         data.drop(data.columns[data.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)  
     return data
@@ -88,12 +93,14 @@ def concat_partition_data():
 
     data_old=read_data()
     data_new=uni_table("blockchain data/bc data/scrapper partition data/")
-    data_new=data_old.append(data_new)
-    data_new=data_new.sort_values(by=['Height'],ascending=False)
-    data_new=data_new.drop_duplicates("Height")
-    data_new.to_csv("blockchain data/bc data/partition_data_crudo.csv")
-    print("Guardado en blockchain data/bc data/partition_data_crudo.csv")
-
+    if data_new!=[]:
+      data_new=data_old.append(data_new)
+      data_new["Height"] = data_new["Height"].astype(int)
+      data_new=data_new.sort_values(by=['Height'],ascending=False)
+      data_new=data_new.drop_duplicates("Height")
+      data_new.to_csv("blockchain data/bc data/partition_data_crudo.csv")
+      print("Guardado en blockchain data/bc data/partition_data_crudo.csv")
+    else:return print("La Lista esta Vacia")
 def concat_lost_block():
 
     # Concatena todos los datos faltantes ya escrappeados
@@ -103,11 +110,14 @@ def concat_lost_block():
 
     data_old=read_data()
     data_new=uni_table("blockchain data/bc data/lost range data/new data/")
-    data_new=data_old.append(data_new)
-    data_new=data_new.sort_values(by=['Height'],ascending=False)
-    data_new=data_new.drop_duplicates("Height")
-    data_new.to_csv("blockchain data/bc data/old data/data_crudo.csv")
-    print("Guardado en blockchain data/bc data/old data/data_crudo.csv")
+    if data_new!=[]:
+        data_new=data_old.append(data_new)
+        data_new["Height"] = data_new["Height"].astype(int)
+        data_new=data_new.sort_values(by=['Height'],ascending=False)
+        data_new=data_new.drop_duplicates("Height")
+        data_new.to_csv("/blockchain data/bc data/old data/data_crudo.csv")
+        print("Guardado en blockchain data/bc data/old data/data_crudo.csv")
+    else:return print("La Lista esta Vacia")
 
 def partition_lost_bock():
 

@@ -307,11 +307,11 @@ def scrapper_lost_block():
         
         if "Height" in data_temp:
             
-            
+            data_temp["Height"] = data_temp["Height"].astype(int)
             data_temp=data_temp.sort_values(by=['Height'],ascending=False)
             data_temp=data_temp.drop_duplicates("Height")
             if 'Unnamed: 0' in data_temp:data_temp.drop(data_temp.columns[data_temp.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-            data_temp=data_temp.dropna
+            data_temp=data_temp.dropna()
             data_temp.to_csv("blockchain data/bc data/lost range data/new data/find_block"+str(n_range_block)+".csv")
             print("Proceso Exitosamente Finalizado")
             
