@@ -27,7 +27,7 @@ if __name__=="__main__":
         print("ADVERTENCIA: puede haber algun error en la da data_crudo.csv, por favor chequear")
     else:
         pt.coy_file()
-
+        
 # ESPAÑOL
 # #################################################################################################################
 # Este es el codigo con que puedes Scrappear la pagina del www.blockchian.com
