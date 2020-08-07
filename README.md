@@ -1,5 +1,5 @@
 
-<img src="Mesa de trabajo 1bitcoin.png" style="margin: 0px 20%;"></img>
+<img src="Python/Stats_Python/Mesa de trabajo 1bitcoin.png" style="margin: 0px 20%;"></img>
 
 ## Is it possible to generate income with digital mining without having to do anything?
 
