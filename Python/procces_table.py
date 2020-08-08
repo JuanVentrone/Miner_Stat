@@ -10,25 +10,28 @@ def n_block():
     stats=sf.blockchain_stats()
     return stats.get("n_blocks_total")
 
-def rango_b(a,b,i,block_f,lista_height):
+def rango_b(a, b ,i, 
+            block_f,lista_height):
 
     while a==lista_height[i]:
         if a==b:return print("Finalizo la Busqueda de Bloques no escrapeados")
         a+=1
         i+=1
-    block_f.append([a,lista_height[i]])
-    return rango_b(lista_height[i],b,i,block_f,lista_height)
+    block_f.append([a , lista_height[ i ]])
+    
+    return rango_b(lista_height[ i ], b, 
+                    i,  block_f, lista_height)
 
 
 def process(block_f):
 
-    page_url_list=[]
-    total=n_block()
+    page_url_list = []
+    total = n_block()
     for i in block_f:
         
-        a=math.ceil(((total-i[0])/50)+2)
-        b=math.ceil(((total-i[1])/50)-1)
-        page_url_list.append({"Ini Page":b,"Final Page":a,"I block":i[0],"F block":i[1]})
+        a = math.ceil(((total - i[0]) / 50) + 2)
+        b = math.ceil(((total - i[1]) /50) - 1)
+        page_url_list.append({"Ini Page":b,"Final Page":a,"I block":i[ 0 ],"F block":i[ 1 ]})
 
     return page_url_list
 
@@ -36,29 +39,32 @@ def find_lost_block():
     
     data=read_data()
     data["Height"] = data["Height"].astype(int)
-    lista_height=list(data["Height"])
+    lista_height = list( data["Height"] )
     lista_height.sort()
-    a=min(lista_height)
-    b=max(lista_height)
-    print(a,b)
+    a = min( lista_height )
+    b =  max( lista_height )
+    print(a , b)
     block_f=[]
     i=0
-    rango_b(a,b,i,block_f,lista_height)
-    if block_f==[]:return print("La data tiene todos los bloques",len(data),"-",max(data["Height"]))
-    df=process(block_f)
-    df_error_pages=pd.DataFrame(df)
+    rango_b(a, b, i,
+            block_f, lista_height)
+
+    if block_f==[]: return print("La data tiene todos los bloques",len( data ),"-",max( data["Height"] ))
+    df = process( block_f )
+    df_error_pages = pd.DataFrame( df )
     df_error_pages.to_csv("blockchain data/bc data/rang_lost_blocks.csv")
     
-    # si deseas activar un escrappeo inmediato
+    # Continue to Scrap the page?
+
     # r=str(input("El Proceso se realizo exitosamente!,¿Desea Scrappear los Bloques Faltantes,?,Presione cualquier tecla"))
-    # if r!="":sf.scrapper_lost_block()
+    # if r!="": sf.scrapper_lost_block()
 
 def uni_table(direc):
     import os
-    g=0
-    data=pd.DataFrame()
-    director=[]
-    dir_tables=os.listdir(direc)
+    g = 0
+    data = pd.DataFrame()
+    director = []
+    dir_tables = os.listdir( direc )
     for dir in dir_tables:
         if not dir.startswith('.'):
           director.append(dir)
@@ -66,14 +72,14 @@ def uni_table(direc):
       for i in director:
           
           try:
-              data_temp=pd.read_csv(direc+i)
-              data=data.append(data_temp)
+              data_temp=pd.read_csv( direc + i )
+              data=data.append( data_temp )
               g=sf.graph_bar(g)
           except:
-              print("No se pudo concatenar:",direc+i)
+              print("No se pudo concatenar:", direc + i )
               pass
       return director  
-    else:return []
+    else: return []
       
     
 def read_data():
@@ -91,16 +97,19 @@ def concat_partition_data():
     # Concatenates all the data that are partitioned.
     # Then concattenate with the main data
 
-    data_old=read_data()
-    data_new=uni_table("blockchain data/bc data/scrapper partition data/")
+    data_old = read_data()
+    data_new = uni_table("blockchain data/bc data/scrapper partition data/")
     if data_new!=[]:
-      data_new=data_old.append(data_new)
+      data_new = data_old.append(data_new)
       data_new["Height"] = data_new["Height"].astype(int)
-      data_new=data_new.sort_values(by=['Height'],ascending=False)
-      data_new=data_new.drop_duplicates("Height")
+      data_new = data_new.sort_values( by=['Height'], ascending=False )
+      data_new = data_new.drop_duplicates("Height")
       data_new.to_csv("blockchain data/bc data/partition_data_crudo.csv")
       print("Guardado en blockchain data/bc data/partition_data_crudo.csv")
-    else:return print("La Lista esta Vacia")
+    
+    else:
+      return print("La Lista esta Vacia")
+    
 def concat_lost_block():
 
     # Concatena todos los datos faltantes ya escrappeados
@@ -108,28 +117,30 @@ def concat_lost_block():
     # 
     # Concatenate all missing and scrapped data with the main data
 
-    data_old=read_data()
-    data_new=uni_table("blockchain data/bc data/lost range data/new data/")
+    data_old = read_data()
+    data_new = uni_table("blockchain data/bc data/lost range data/new data/")
     if data_new!=[]:
-        data_new=data_old.append(data_new)
+        data_new = data_old.append( data_new )
         data_new["Height"] = data_new["Height"].astype(int)
-        data_new=data_new.sort_values(by=['Height'],ascending=False)
-        data_new=data_new.drop_duplicates("Height")
+        data_new = data_new.sort_values( by=['Height'], ascending=False)
+        data_new = data_new.drop_duplicates("Height")
         data_new.to_csv("/blockchain data/bc data/old data/data_crudo.csv")
         print("Guardado en blockchain data/bc data/old data/data_crudo.csv")
-    else:return print("La Lista esta Vacia")
+    
+    else:
+        return print("La Lista esta Vacia")
 
 def partition_lost_bock():
 
-    data=pd.read_csv("blockchain data/bc data/rang_lost_blocks.csv")
-    x=int(len(data)/12)
+    data = pd.read_csv("blockchain data/bc data/rang_lost_blocks.csv")
+    x=int( len(data) / 12 )
 
     lista=[]
     for i in range(x):
-        lista.append([i*x,i*x+x])
+        lista.append([ i*x, i*x+x ])
 
     for i in lista:
-        data_temp=data[i[0]:i[1]]
+        data_temp=data[ i[0] : i[1] ]
         data_temp.to_csv("blockchain data/bc data/lost range data/lost_blocks"+str(i[0])+"_"+str(i[1])+".csv")
 
 def coy_file():
